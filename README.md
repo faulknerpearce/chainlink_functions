@@ -6,7 +6,7 @@ This project demonstrates how to use Chainlink Functions to interact with the St
 ## Prerequisites
 - A Chainlink Functions subscription
 - A Strava API application
-- Sepolia testnet ETH
+- Avalanche fuji testnet AVAX
 - Metamask or another web3 wallet
 - Node.js (v16 or later)
 - npm or yarn
@@ -62,7 +62,7 @@ ACCESS_TOKEN = 'YOUR_ACCESS_TOKEN'
 # Install dependencies
 npm install
 
-# Deploy to Sepolia testnet
+# Deploy to Avalanche testnet
 npx hardhat run scripts/deploy.js --network fuji
 ```
 
