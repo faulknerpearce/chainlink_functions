@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 dotenv.config();
 
-// This function refreshes the users access token.
+// Fefreshes the users access token.
 async function refreshAccessToken() {
     const url = 'https://www.strava.com/oauth/token';
     const response = await fetch(url, {
@@ -27,9 +27,23 @@ async function refreshAccessToken() {
     }
 }
 
+// Fetch user activity from Strava API and refresh the access token if expired.
 async function fetchUserActivity() {
     try {
-        const accessToken = await refreshAccessToken();
+
+        const currentTimestamp = Date.now();
+
+        if (currentTimestamp > process.env.TOKEN_EXPIRY) {
+            console.log("Token expired, refreshing...");
+            const accessToken = await refreshAccessToken();
+            process.env.ACCESS_TOKEN = accessToken;
+        }
+
+        else{
+            console.log("Token is still valid.");
+        }
+
+        console.log("Access Token:", process.env.ACCESS_TOKEN);
 
         const response = await fetch('https://www.strava.com/api/v3/athlete/activities', {
             method: 'GET',
@@ -37,13 +51,17 @@ async function fetchUserActivity() {
         });
 
         const data = await response.json();
-        console.log(data);
+
+        for (const activity of data){
+            console.log(`Activity Type: ${activity.type}`);
+            console.log(`Activity Distance: ${activity.distance}`);
+            console.log(`Activity Start Date: ${activity.start_date}`);
+            console.log(`--------------------------------------------`);
+        }
 
     } catch (error) {
         console.error('Error fetching user activity:', error);
     }
 }
-
-
 
 fetchUserActivity();
